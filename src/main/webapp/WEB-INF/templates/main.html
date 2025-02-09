@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Guitar Shop CF6</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/main.css" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+
+<div style="display: grid">
+    <img style="float:left;" width="200" height="200" src="../../images/guitar.png" alt="Main logo" title="Main logo"
+         th:src="@{/images/guitar.png}" th:alt-title="#{title.application}"/>
+    <h1 style="float:left;" th:text="#{title.application}">Guitar Shop CF6</h1>
+</div>
+<div class="guitarlist" th:unless="${#lists.isEmpty(allGuitars)}">
+
+    <h2 th:text="#{title.list}">List of Guitars</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{guitar.name}">Guitar Name</th>
+            <th th:text="#{guitar.fretNo}">Frets No.</th>
+            <th th:text="#{guitar.shape}">Style</th>
+            <th th:text="#{guitar.price}">Price</th>
+            <th th:if="${isUser}" th:text="#{guitar.actions}">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="g : ${allGuitars}">
+            <td th:text="${g.name}">1</td>
+            <td th:text="${g.fretNo}">Guitar Name</td>
+            <td th:text="${g.shape}">Guitar Style</td>
+            <td th:text="${g.price}">Guitar Price</td>
+            <td th:if="${isUser}">
+                <form action="#" th:action="@{'/guitar/' + ${g.id}}" th:object="${g}" method="post">
+                    <span class="submit">
+                        <button type="submit" name="addToCart" th:text="#{guitar.cart.add}">Add to Cart</button>
+                    </span >
+                    <span th:text="${cartQnt[g.id]}">0</span>
+                    <span class="submit">
+                        <button type="submit" name="removeFromCart" th:text="#{guitar.cart.sub}">Remove from Cart</button>
+                    </span >
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${isAdmin}">
+
+    <h2 th:text="#{title.new}">Add new Guitar</h2>
+
+    <form action="#" th:action="@{/guitar}" th:object="${guitarDTO}" method="post">
+
+        <fieldset>
+
+            <legend th:text="#{guitar.data}">Guitar Data</legend>
+
+            <ul th:if="${#fields.hasErrors('*')}" class="errorlist">
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+            </ul>
+
+            <div>
+                <label for="name">
+                    <span th:text="#{guitar.name}">Guitar Name</span>
+                </label>
+                <input id="name" type="text" th:field="*{name}" th:errorclass="fieldError"/>
+            </div>
+            <div>
+                <label for="fretNo" th:text="#{guitar.fretNo}">Fret No.</label>
+                <input id="fretNo" type="text" th:field="*{fretNo}" th:errorclass="fieldError"/>
+            </div>
+            <div>
+                <label for="shape" th:text="#{guitar.shape}">Shape</label>
+                <input id="shape" type="text" th:field="*{shape}" th:errorclass="fieldError"/>
+            </div>
+            <div>
+                <label for="price" th:text="#{guitar.price}">Price</label>
+                <input id="price" type="number" th:field="*{price}" th:errorclass="fieldError"/>
+            </div>
+
+            <div class="submit">
+                <button type="submit" name="save" th:text="#{guitar.create}">Add Guitar</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
