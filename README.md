@@ -12,7 +12,8 @@ The below command will run the app:
 ./mvnw spring-boot:run
 ```
 
-##Details
+## Details
+
 Through annotations we request multiple urls
 The guitar shop has different pages, for guests, users and administrators
 The guest can browse guitars without any credentials
